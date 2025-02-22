@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: hitandblow
-        image: dqx0/hitandblow:latest
+        image: dqx0/hitandblow:v1.0.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
 ---

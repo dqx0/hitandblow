@@ -35,7 +35,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: dqx0/hitandblow:latest
+          tags: dqx0/hitandblow:v1.0.0
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -57,5 +57,5 @@ jobs:
 
       - name: Update Kubernetes Deployment
         run: |
-          kubectl set image deployment/hitandblow hitandblow=dqx0/hitandblow:latest
+          kubectl set image deployment/hitandblow hitandblow=dqx0/hitandblow:v1.0.0
           kubectl rollout status deployment/hitandblow

@@ -38,7 +38,7 @@ resource "kubernetes_deployment" "hitandblow" {
       spec {
         container {
           name  = "hitandblow"
-          image = "dqx0/hitandblow:latest"
+          image = "dqx0/hitandblow:v1.0.0"
           image_pull_policy = "Always"
           port {
             container_port = 8080
