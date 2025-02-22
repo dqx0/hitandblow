@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: Hit and Blow GameのAPIドキュメント
+  title: Hit and Blow API
+  version: 1.0.0
+paths: {}
+swagger: "2.0"
