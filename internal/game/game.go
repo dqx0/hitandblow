@@ -17,6 +17,14 @@ type Result struct {
 	Blow int
 }
 
+// @Summary ゲーム開始
+// @Description 新しいゲームを開始する
+// @Tags game
+// @Accept json
+// @Produce json
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /games [post]
 func NewGame() *Game {
 	return &Game{
 		answer: generateAnswer(),

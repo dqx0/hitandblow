@@ -1,9 +1,83 @@
 basePath: /
+definitions:
+  server.GuessRequest:
+    properties:
+      number:
+        type: string
+    type: object
+  server.GuessResponse:
+    properties:
+      blow:
+        type: integer
+      clear:
+        type: boolean
+      hit:
+        type: integer
+      tries:
+        type: integer
+    type: object
+  server.StartNewGameResponse:
+    properties:
+      game_id:
+        type: string
+      message:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: Hit and Blow GameのAPIドキュメント
   title: Hit and Blow API
   version: 1.0.0
-paths: {}
+paths:
+  /games:
+    post:
+      consumes:
+      - application/json
+      description: 新しいゲームを開始し、ゲームIDとメッセージを返す
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/server.StartNewGameResponse'
+      summary: ゲーム開始
+      tags:
+      - game
+  /games/{gameId}/guess:
+    post:
+      consumes:
+      - application/json
+      description: ゲームに対して推測を送信し、判定結果を返す
+      parameters:
+      - description: ゲームID
+        in: path
+        name: gameId
+        required: true
+        type: string
+      - description: 推測情報
+        in: body
+        name: guess
+        required: true
+        schema:
+          $ref: '#/definitions/server.GuessRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 推測結果
+          schema:
+            $ref: '#/definitions/server.GuessResponse'
+        "400":
+          description: 無効なリクエスト
+          schema:
+            type: object
+        "404":
+          description: ゲームが見つかりません
+          schema:
+            type: object
+      summary: ゲームの推測
+      tags:
+      - game
 swagger: "2.0"

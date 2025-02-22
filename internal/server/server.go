@@ -26,24 +26,48 @@ type GuessResponse struct {
 	Clear bool `json:"clear"`
 }
 
+type StartNewGameResponse struct {
+	GameID  string `json:"game_id"`
+	Message string `json:"message"`
+}
+
 func NewGameServer() *GameServer {
 	return &GameServer{
 		games: make(map[string]*game.Game),
 	}
 }
 
+// @Summary ゲーム開始
+// @Description 新しいゲームを開始し、ゲームIDとメッセージを返す
+// @Tags game
+// @Accept json
+// @Produce json
+// @Success 201 {object} server.StartNewGameResponse
+// @Router /games [post]
 func (s *GameServer) StartNewGame(c *gin.Context) {
 	s.mu.Lock()
 	gameID := generateGameID()
 	s.games[gameID] = game.NewGame()
 	s.mu.Unlock()
 
-	c.JSON(http.StatusCreated, gin.H{
-		"game_id": gameID,
-		"message": "新しいゲームを開始しました",
-	})
+	resp := StartNewGameResponse{
+		GameID:  gameID,
+		Message: "新しいゲームを開始しました",
+	}
+	c.JSON(http.StatusCreated, resp)
 }
 
+// @Summary ゲームの推測
+// @Description ゲームに対して推測を送信し、判定結果を返す
+// @Tags game
+// @Accept json
+// @Produce json
+// @Param gameId path string true "ゲームID"
+// @Param guess body server.GuessRequest true "推測情報"
+// @Success 200 {object} server.GuessResponse "推測結果"
+// @Failure 400 {object} object "無効なリクエスト"
+// @Failure 404 {object} object "ゲームが見つかりません"
+// @Router /games/{gameId}/guess [post]
 func (s *GameServer) MakeGuess(c *gin.Context) {
 	gameID := c.Param("gameId")
 

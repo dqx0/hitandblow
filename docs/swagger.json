@@ -8,5 +8,120 @@
     },
     "host": "localhost:8080",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/games": {
+            "post": {
+                "description": "新しいゲームを開始し、ゲームIDとメッセージを返す",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "game"
+                ],
+                "summary": "ゲーム開始",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/server.StartNewGameResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/games/{gameId}/guess": {
+            "post": {
+                "description": "ゲームに対して推測を送信し、判定結果を返す",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "game"
+                ],
+                "summary": "ゲームの推測",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ゲームID",
+                        "name": "gameId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "推測情報",
+                        "name": "guess",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.GuessRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "推測結果",
+                        "schema": {
+                            "$ref": "#/definitions/server.GuessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "無効なリクエスト",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "ゲームが見つかりません",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "server.GuessRequest": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.GuessResponse": {
+            "type": "object",
+            "properties": {
+                "blow": {
+                    "type": "integer"
+                },
+                "clear": {
+                    "type": "boolean"
+                },
+                "hit": {
+                    "type": "integer"
+                },
+                "tries": {
+                    "type": "integer"
+                }
+            }
+        },
+        "server.StartNewGameResponse": {
+            "type": "object",
+            "properties": {
+                "game_id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }
