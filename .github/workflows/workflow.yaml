@@ -51,15 +51,12 @@ jobs:
       - name: Install GKE gcloud auth plugin
         run: gcloud components install gke-gcloud-auth-plugin --quiet
 
-      - name: Get GKE Credentials
+      - name: Get GKE Credentials and Update Kubernetes Deployment
         run: |
           if gcloud container clusters describe hitandblow-cluster --region us-central1 --project gcp-dqx0 > /dev/null 2>&1; then
             gcloud container clusters get-credentials hitandblow-cluster --region us-central1 --project gcp-dqx0
+            kubectl set image deployment/hitandblow hitandblow=dqx0/hitandblow:v1.0.0
+            kubectl rollout status deployment/hitandblow
           else
             echo "Cluster hitandblow-cluster does not exist. Skipping get credentials."
           fi
-
-      - name: Update Kubernetes Deployment
-        run: |
-          kubectl set image deployment/hitandblow hitandblow=dqx0/hitandblow:v1.0.0
-          kubectl rollout status deployment/hitandblow
