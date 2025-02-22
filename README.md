@@ -28,3 +28,5 @@ hitandblow/
 ├── go.mod
 └── README.md
 ```
+## License
+Apache 2.0
