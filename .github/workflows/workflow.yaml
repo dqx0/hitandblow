@@ -53,7 +53,11 @@ jobs:
 
       - name: Get GKE Credentials
         run: |
-          gcloud container clusters get-credentials hitandblow-cluster --region us-central1 --project gcp-dqx0
+          if gcloud container clusters describe hitandblow-cluster --region us-central1 --project gcp-dqx0 > /dev/null 2>&1; then
+            gcloud container clusters get-credentials hitandblow-cluster --region us-central1 --project gcp-dqx0
+          else
+            echo "Cluster hitandblow-cluster does not exist. Skipping get credentials."
+          fi
 
       - name: Update Kubernetes Deployment
         run: |
